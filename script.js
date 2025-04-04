@@ -4,8 +4,10 @@ const speakBtn = document.getElementById("speak-btn");
 const stopBtn = document.getElementById("stop-btn");
 const saveBtn = document.getElementById("save-btn");
 
+const HUGGING_FACE_API_TOKEN = "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";
 const AZURE_SPEECH_KEY = "6siXlmXbDoab14hWXAuHCALCr77pSNxAyrl5YZmCYEKWEDJJrVMWJQQJ99BDACGhslBXJ3w3AAAYACOGKGni";
 const AZURE_SPEECH_REGION = "centralindia";
+const AZURE_BLOB_SAS_URL = "https://storycraftblob.blob.core.windows.net/stories?sp=rcw&st=2025-04-04T10:42:01Z&se=2025-06-10T18:42:01Z&spr=https&sv=2024-11-04&sr=c&sig=rDfkWCz8JHt1XIc5W1QYIV51hgonFS7wcWJ0P7gGF5w%3D";
 
 let synthesizer = null;
 let isSpeaking = false;
@@ -19,21 +21,41 @@ form.addEventListener("submit", async (e) => {
   storyEl.textContent = "Generating story...";
 
   try {
-    const response = await fetch("https://your-backend-url.com/generate-story", {  // Update this URL to your actual backend URL
+    const response = await fetch("https://cors-anywhere.herokuapp.com/https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt: userInput,
+        inputs: prompt,
+        parameters: {
+          max_new_tokens: 400, // Longer story
+          temperature: 0.8,
+          top_p: 0.9,
+          do_sample: true,
+        }
       }),
     });
 
     const data = await response.json();
-    const story = data.story || "No story generated.";
+    const story = data[0]?.generated_text || "No story generated.";
 
-    // Clean the story: Remove prompt if repeated
+    // 🧼 Clean the story: Remove prompt if repeated
     const cleanedStory = story.replace(prompt, "").trim();
+
+    storyEl.textContent = cleanedStory;
+  } catch (error) {
+    console.error("Error generating story:", error);
+    storyEl.textContent = "Error generating story. Please try again.";
+  }
+});
+
+    const data = await response.json();
+    const story = data[0]?.generated_text || "No story generated.";
+
+    // 🧼 Clean the story: Remove prompt if repeated
+    const cleanedStory = story.replace(prompt, "").trim();
+
     storyEl.textContent = cleanedStory;
   } catch (error) {
     console.error("Error generating story:", error);
