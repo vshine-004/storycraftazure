@@ -10,60 +10,50 @@ let utterance = null;
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
+
   const userInput = promptInput.value.trim();
   if (!userInput) return;
 
-  const finalPrompt = `Write a fun, detailed, and simple children's story (about 300-400 words) in easy English. Do not include this prompt in the story. Story topic: ${userInput}`;
-  console.log("Generated prompt:", finalPrompt);
-  console.log("Making request to backend...");
+  const prompt = `Write a fun, detailed, and simple children's story (about 300-400 words) in easy English. Do not include this prompt in the story. Story topic: ${userInput}`;
+
+  storyPara.textContent = "Generating story... ✨";
+  outputSection.classList.remove("hidden");
 
   try {
     const res = await fetch("https://azurebackend-wbne.onrender.com/generate-story", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: finalPrompt })
+      body: JSON.stringify({ prompt })
     });
 
     const data = await res.json();
-    console.log("Backend response:", data);
-
-    const fullStory = data.story;
-    const cleanedStory = fullStory.replace(/^Write.*?story topic:.*?\n?/i, "").trim();
-
-    storyPara.textContent = cleanedStory;
-    outputSection.classList.remove("hidden");
-
+    storyPara.textContent = data.story || "Oops! No story was returned.";
   } catch (err) {
-    console.error("Error generating story:", err);
-    storyPara.textContent = "Sorry! Something went wrong. Please try again later.";
-    outputSection.classList.remove("hidden");
+    console.error("Error:", err);
+    storyPara.textContent = "Something went wrong. Try again!";
   }
 });
 
-// 🔊 Read Aloud
 speakBtn.addEventListener("click", () => {
-  const text = storyPara.textContent;
-  if (!text) return;
+  if (utterance) speechSynthesis.cancel();
 
-  utterance = new SpeechSynthesisUtterance(text);
+  utterance = new SpeechSynthesisUtterance(storyPara.textContent);
+  utterance.lang = "en-US";
   speechSynthesis.speak(utterance);
 });
 
-// 🛑 Stop Voice
 stopBtn.addEventListener("click", () => {
-  if (utterance) speechSynthesis.cancel();
+  speechSynthesis.cancel();
 });
 
-// 💾 Save Story
 saveBtn.addEventListener("click", () => {
-  const text = storyPara.textContent;
-  if (!text) return;
-
-  const blob = new Blob([text], { type: "text/plain" });
+  const blob = new Blob([storyPara.textContent], { type: "text/plain" });
   const url = URL.createObjectURL(blob);
+
   const a = document.createElement("a");
   a.href = url;
-  a.download = "my_ai_story.txt";
+  a.download = "my-story.txt";
   a.click();
+
   URL.revokeObjectURL(url);
 });
