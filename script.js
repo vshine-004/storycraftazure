@@ -5,9 +5,6 @@ const stopBtn = document.getElementById("stop-btn");
 const saveBtn = document.getElementById("save-btn");
 const outputSection = document.getElementById("output-section");
 
-// Hugging Face Token
-const HUGGING_FACE_API_TOKEN = "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";
-
 // Azure Keys
 const AZURE_SPEECH_KEY = "6siXlmXbDoab14hWXAuHCALCr77pSNxAyrl5YZmCYEKWEDJJrVMWJQQJ99BDACGhslBXJ3w3AAAYACOGKGni";
 const AZURE_SPEECH_REGION = "centralindia";
@@ -17,7 +14,7 @@ const AZURE_BLOB_SAS_URL = "https://storycraftblob.blob.core.windows.net/stories
 
 let synthesizer = null;
 
-// STORY GENERATION
+// STORY GENERATION (Using Your Hugging Face Space)
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const userInput = document.getElementById("prompt").value.trim();
@@ -29,18 +26,18 @@ form.addEventListener("submit", async (e) => {
   outputSection.classList.add("show");
 
   try {
-    const response = await fetch("https://api-inference.huggingface.co/models/gpt2", {
+    const response = await fetch("https://vaishnavi-kidstory-generator.hf.space/run/predict", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${HUGGING_FACE_API_TOKEN}`,
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify({ inputs: prompt }),
+      body: JSON.stringify({
+        data: [prompt]
+      })
     });
 
-    const data = await response.json();
-
-    const story = data[0]?.generated_text || "❌ No story generated.";
+    const result = await response.json();
+    const story = result.data[0] || "❌ No story generated.";
     storyEl.textContent = story.trim();
     console.log("📘 Story generated:", story);
   } catch (error) {
