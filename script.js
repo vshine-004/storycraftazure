@@ -18,9 +18,11 @@ form.addEventListener("submit", async (e) => {
   const prompt = `Write a fun, detailed, and simple children's story (about 300-400 words) in easy English. Do not include this prompt in the story. Story topic: ${userInput}`;
 
   storyEl.textContent = "Generating story...";
+  console.log("Form submitted. User input:", userInput);
+  console.log("Generated prompt:", prompt);
 
   try {
-    // Replace this URL with your backend's URL deployed on Render
+    console.log("Making request to backend...");
     const response = await fetch("https://azurebackend-wbne.onrender.com/generate-story", {
       method: "POST",
       headers: {
@@ -31,11 +33,20 @@ form.addEventListener("submit", async (e) => {
       }),
     });
 
+    if (!response.ok) {
+      console.error("Error with response:", response);
+      throw new Error("Failed to fetch story from the backend.");
+    }
+
     const data = await response.json();
+    console.log("Backend response:", data);
+
     const story = data.story || "No story generated.";
+    console.log("Generated story:", story);
 
     // 🧼 Clean the story: Remove prompt if repeated
     const cleanedStory = story.replace(prompt, "").trim();
+    console.log("Cleaned story:", cleanedStory);
 
     storyEl.textContent = cleanedStory;
   } catch (error) {
@@ -49,13 +60,20 @@ speakBtn.addEventListener("click", () => {
   const SpeechSDK = window.SpeechSDK;
   const storyText = storyEl.textContent;
 
-  if (!SpeechSDK || !storyText || isSpeaking) return;
+  console.log("Speak button clicked.");
+  console.log("Story text to speak:", storyText);
+
+  if (!SpeechSDK || !storyText || isSpeaking) {
+    console.log("Either Speech SDK not found, no story text, or speech is already in progress.");
+    return;
+  }
 
   const speechConfig = SpeechSDK.SpeechConfig.fromSubscription(AZURE_SPEECH_KEY, AZURE_SPEECH_REGION);
   const audioConfig = SpeechSDK.AudioConfig.fromDefaultSpeakerOutput();
   synthesizer = new SpeechSDK.SpeechSynthesizer(speechConfig, audioConfig);
 
   isSpeaking = true;
+  console.log("Speech synthesis started...");
 
   synthesizer.speakTextAsync(
     storyText,
@@ -81,6 +99,7 @@ speakBtn.addEventListener("click", () => {
 
 // Stop Speech
 stopBtn.addEventListener("click", () => {
+  console.log("Stop button clicked.");
   if (synthesizer && isSpeaking) {
     synthesizer.stopSpeakingAsync(() => {
       console.log("Speech stopped.");
@@ -90,5 +109,8 @@ stopBtn.addEventListener("click", () => {
     }, error => {
       console.error("Error stopping speech:", error);
     });
+  } else {
+    console.log("No speech is currently being spoken.");
   }
 });
+
