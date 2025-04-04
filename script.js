@@ -16,7 +16,7 @@ let isSpeaking = false;
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const userInput = document.getElementById("prompt").value.trim();
-  const prompt = `Write a short and simple story for children in easy English about: ${userInput}`;
+  const prompt = `Write a fun, detailed, and simple children's story (about 300-400 words) in easy English. Do not include this prompt in the story. Story topic: ${userInput}`;
 
   storyEl.textContent = "Generating story...";
 
@@ -30,14 +30,26 @@ form.addEventListener("submit", async (e) => {
       body: JSON.stringify({
         inputs: prompt,
         parameters: {
-          max_new_tokens: 200,
-          temperature: 0.7,
+          max_new_tokens: 400, // Longer story
+          temperature: 0.8,
           top_p: 0.9,
           do_sample: true,
         }
       }),
     });
 
+    const data = await response.json();
+    const story = data[0]?.generated_text || "No story generated.";
+
+    // 🧼 Clean the story: Remove prompt if repeated
+    const cleanedStory = story.replace(prompt, "").trim();
+
+    storyEl.textContent = cleanedStory;
+  } catch (error) {
+    console.error("Error generating story:", error);
+    storyEl.textContent = "Error generating story. Please try again.";
+  }
+});
     const data = await response.json();
     const story = data[0]?.generated_text || "No story generated.";
     storyEl.textContent = story.trim();
