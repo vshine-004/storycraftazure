@@ -29,7 +29,7 @@ form.addEventListener("submit", async (e) => {
       body: JSON.stringify({
         inputs: prompt,
         parameters: {
-          max_new_tokens: 400, // Longer story
+          max_new_tokens: 400,
           temperature: 0.8,
           top_p: 0.9,
           do_sample: true,
@@ -37,13 +37,21 @@ form.addEventListener("submit", async (e) => {
       }),
     });
 
-    const data = await response.json();
-    const story = data[0]?.generated_text || "No story generated.";
+    const text = await response.text(); // Get raw text from response
+    console.log(text); // Log the raw response to debug
 
-    // Clean the story: Remove prompt if repeated
-    const cleanedStory = story.replace(prompt, "").trim();
+    // Attempt to parse the response as JSON
+    try {
+      const data = JSON.parse(text);
+      const story = data[0]?.generated_text || "No story generated.";
 
-    storyEl.textContent = cleanedStory;
+      // Clean the story: Remove the prompt if repeated
+      const cleanedStory = story.replace(prompt, "").trim();
+      storyEl.textContent = cleanedStory;
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+      storyEl.textContent = "Error generating story. Please try again.";
+    }
   } catch (error) {
     console.error("Error generating story:", error);
     storyEl.textContent = "Error generating story. Please try again.";
