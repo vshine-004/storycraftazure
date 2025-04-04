@@ -1,36 +1,33 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>StoryCraft – AI Story Generator</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script> <!-- Azure Speech SDK -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script type="module" src="script.js" defer></script>
 </head>
-<style>
-    body {
-      font-family: 'Poppins', sans-serif;
-    }
-  </style>
 <body>
-  <h1>📖 StoryCraft</h1>
+  <div class="container">
+    <h1>📖 StoryCraft</h1>
 
-  <form id="story-form">
-    <input type="text" id="prompt" placeholder="Enter a story prompt..." required />
-    <button type="submit">Generate Story</button>
-  </form>
+    <form id="story-form">
+      <input type="text" id="prompt" placeholder="Enter a magical story prompt..." required />
+      <button type="submit">Generate ✨</button>
+    </form>
 
-  <section id="output-section">
-    <h2>Your AI Story:</h2>
-    <p id="story"></p>
+    <section id="output-section" class="hidden">
+      <h2>📚 Your AI Story:</h2>
+      <p id="story"></p>
 
-    <button id="speak-btn">🔊 Read Aloud</button>
-    <button id="save-btn">💾 Save Story</button>
-    <button id="stop-btn">Stop Voice</button>
-
-  </section>
-
+      <div class="btn-group">
+        <button id="speak-btn">🔊 Read Aloud</button>
+        <button id="save-btn">📂 Save Story</button>
+        <button id="stop-btn">Stop Voice</button>
+      </div>
+    </section>
+  </div>
   <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script>
-<script src="script.js"></script>
 </body>
 </html>
+
