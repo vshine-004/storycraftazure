@@ -1,0 +1,73 @@
+/* Base Styling */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+    color: #333;
+    padding: 30px;
+    max-width: 700px;
+    margin: auto;
+  }
+  
+  /* Heading */
+  h1 {
+    color: #0078d4;
+    margin-bottom: 25px;
+    font-size: 2.5rem;
+    text-align: center;
+  }
+  
+  /* Form Section */
+  form {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Buttons */
+  button {
+    padding: 12px 20px;
+    background: #0078d4;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  button:hover {
+    background-color: #005fa3;
+    transform: translateY(-1px);
+  }
+  
+  #output-section {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    margin-top: 20px;
+  }
+  
+  /* Story Text */
+  #story {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  
+  /* Output Buttons */
+  #output-section button {
+    margin-right: 10px;
+  }
+  

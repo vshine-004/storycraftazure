@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>StoryCraft – AI Story Generator</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script> <!-- Azure Speech SDK -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+<body>
+  <h1>📖 StoryCraft</h1>
+
+  <form id="story-form">
+    <input type="text" id="prompt" placeholder="Enter a story prompt..." required />
+    <button type="submit">Generate Story</button>
+  </form>
+
+  <section id="output-section">
+    <h2>Your AI Story:</h2>
+    <p id="story"></p>
+
+    <button id="speak-btn">🔊 Read Aloud</button>
+    <button id="save-btn">💾 Save Story</button>
+    <button id="stop-btn">Stop Voice</button>
+
+  </section>
+
+  <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script>
+<script src="script.js"></script>
+</body>
+</html>
