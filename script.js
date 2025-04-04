@@ -4,10 +4,7 @@ const speakBtn = document.getElementById("speak-btn");
 const stopBtn = document.getElementById("stop-btn");
 const saveBtn = document.getElementById("save-btn");
 
-const HUGGING_FACE_API_TOKEN = "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";
-const AZURE_SPEECH_KEY = "6siXlmXbDoab14hWXAuHCALCr77pSNxAyrl5YZmCYEKWEDJJrVMWJQQJ99BDACGhslBXJ3w3AAAYACOGKGni";
-const AZURE_SPEECH_REGION = "centralindia";
-const AZURE_BLOB_SAS_URL = "https://storycraftblob.blob.core.windows.net/stories?sp=rcw&st=2025-04-04T10:42:01Z&se=2025-06-10T18:42:01Z&spr=https&sv=2024-11-04&sr=c&sig=rDfkWCz8JHt1XIc5W1QYIV51hgonFS7wcWJ0P7gGF5w%3D";
+const REPLICATE_API_KEY = "r8_aEDOBKgHzirH2QPl62COUT9ohJtVmeP3goB3C";  // Your Replicate API Key
 
 let synthesizer = null;
 let isSpeaking = false;
@@ -21,37 +18,25 @@ form.addEventListener("submit", async (e) => {
   storyEl.textContent = "Generating story...";
 
   try {
-    const response = await fetch("https://cors-anywhere.herokuapp.com/https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct", {
+    const response = await fetch("https://api.replicate.com/v1/predictions", {
       method: "POST",
       headers: {
+        "Authorization": `Token ${REPLICATE_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        inputs: prompt,
-        parameters: {
-          max_new_tokens: 400,
-          temperature: 0.8,
-          top_p: 0.9,
-          do_sample: true,
-        }
+        version: "b17e8c2c80b23cf9517c94476825b772c43d9449", // GPT-3 Model Version for text generation
+        input: {
+          prompt: prompt,
+        },
       }),
     });
 
-    const text = await response.text(); // Get raw text from response
-    console.log(text); // Log the raw response to debug
+    const data = await response.json();
+    console.log(data); // Log the data for debugging
 
-    // Attempt to parse the response as JSON
-    try {
-      const data = JSON.parse(text);
-      const story = data[0]?.generated_text || "No story generated.";
-
-      // Clean the story: Remove the prompt if repeated
-      const cleanedStory = story.replace(prompt, "").trim();
-      storyEl.textContent = cleanedStory;
-    } catch (error) {
-      console.error("Error parsing JSON:", error);
-      storyEl.textContent = "Error generating story. Please try again.";
-    }
+    const story = data?.output?.[0] || "No story generated.";
+    storyEl.textContent = story;
   } catch (error) {
     console.error("Error generating story:", error);
     storyEl.textContent = "Error generating story. Please try again.";
@@ -106,5 +91,4 @@ stopBtn.addEventListener("click", () => {
     });
   }
 });
-
 
