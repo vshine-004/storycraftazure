@@ -4,7 +4,8 @@ const speakBtn = document.getElementById("speak-btn");
 const stopBtn = document.getElementById("stop-btn");
 const saveBtn = document.getElementById("save-btn");
 
-const REPLICATE_API_KEY = "r8_aEDOBKgHzirH2QPl62COUT9ohJtVmeP3goB3C";  // Your Replicate API Key
+const AZURE_SPEECH_KEY = "6siXlmXbDoab14hWXAuHCALCr77pSNxAyrl5YZmCYEKWEDJJrVMWJQQJ99BDACGhslBXJ3w3AAAYACOGKGni";
+const AZURE_SPEECH_REGION = "centralindia";
 
 let synthesizer = null;
 let isSpeaking = false;
@@ -18,25 +19,22 @@ form.addEventListener("submit", async (e) => {
   storyEl.textContent = "Generating story...";
 
   try {
-    const response = await fetch("https://api.replicate.com/v1/predictions", {
+    const response = await fetch("https://your-backend-url.com/generate-story", {  // Update this URL to your actual backend URL
       method: "POST",
       headers: {
-        "Authorization": `Token ${REPLICATE_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        version: "b17e8c2c80b23cf9517c94476825b772c43d9449", // GPT-3 Model Version for text generation
-        input: {
-          prompt: prompt,
-        },
+        prompt: userInput,
       }),
     });
 
     const data = await response.json();
-    console.log(data); // Log the data for debugging
+    const story = data.story || "No story generated.";
 
-    const story = data?.output?.[0] || "No story generated.";
-    storyEl.textContent = story;
+    // Clean the story: Remove prompt if repeated
+    const cleanedStory = story.replace(prompt, "").trim();
+    storyEl.textContent = cleanedStory;
   } catch (error) {
     console.error("Error generating story:", error);
     storyEl.textContent = "Error generating story. Please try again.";
