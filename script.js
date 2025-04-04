@@ -21,13 +21,9 @@ form.addEventListener("submit", async (e) => {
   storyEl.textContent = "Generating story...";
 
   try {
-    // Use a CORS proxy to bypass CORS restrictions
-    const corsProxy = "https://api.allorigins.win/get?url=";
-    const url = `https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct`;
-    const response = await fetch(corsProxy + encodeURIComponent(url), {
+    const response = await fetch("https://cors-anywhere.herokuapp.com/https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${HUGGING_FACE_API_TOKEN}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -40,6 +36,19 @@ form.addEventListener("submit", async (e) => {
         }
       }),
     });
+
+    const data = await response.json();
+    const story = data[0]?.generated_text || "No story generated.";
+
+    // 🧼 Clean the story: Remove prompt if repeated
+    const cleanedStory = story.replace(prompt, "").trim();
+
+    storyEl.textContent = cleanedStory;
+  } catch (error) {
+    console.error("Error generating story:", error);
+    storyEl.textContent = "Error generating story. Please try again.";
+  }
+});
 
     const data = await response.json();
     const story = data[0]?.generated_text || "No story generated.";
