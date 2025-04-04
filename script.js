@@ -40,20 +40,7 @@ form.addEventListener("submit", async (e) => {
     const data = await response.json();
     const story = data[0]?.generated_text || "No story generated.";
 
-    // 🧼 Clean the story: Remove prompt if repeated
-    const cleanedStory = story.replace(prompt, "").trim();
-
-    storyEl.textContent = cleanedStory;
-  } catch (error) {
-    console.error("Error generating story:", error);
-    storyEl.textContent = "Error generating story. Please try again.";
-  }
-});
-
-    const data = await response.json();
-    const story = data[0]?.generated_text || "No story generated.";
-
-    // 🧼 Clean the story: Remove prompt if repeated
+    // Clean the story: Remove prompt if repeated
     const cleanedStory = story.replace(prompt, "").trim();
 
     storyEl.textContent = cleanedStory;
