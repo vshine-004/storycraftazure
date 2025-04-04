@@ -1,73 +1,90 @@
 /* Base Styling */
 body {
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-    color: #333;
-    padding: 30px;
-    max-width: 700px;
-    margin: auto;
-  }
-  
-  /* Heading */
-  h1 {
-    color: #0078d4;
-    margin-bottom: 25px;
-    font-size: 2.5rem;
-    text-align: center;
-  }
-  
-  /* Form Section */
-  form {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  input[type="text"] {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Buttons */
-  button {
-    padding: 12px 20px;
-    background: #0078d4;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-  }
-  
-  button:hover {
-    background-color: #005fa3;
-    transform: translateY(-1px);
-  }
-  
-  #output-section {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    text-align: left;
-    margin-top: 20px;
-  }
-  
-  /* Story Text */
-  #story {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 20px;
-  }
-  
-  /* Output Buttons */
-  #output-section button {
-    margin-right: 10px;
-  }
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to right, #dfe9f3 0%, #ffffff 100%);
+  color: #333;
+  margin: 0;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Heading */
+h1 {
+  color: #4b7bec;
+  font-size: 3rem;
+  margin-bottom: 25px;
+  text-shadow: 1px 1px 2px #ccc;
+}
+
+/* Form */
+form {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+button {
+  background-color: #4b7bec;
+  color: white;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #3867d6;
+  transform: translateY(-2px);
+}
+
+/* Output Section */
+#output-section {
+  display: none;
+  background-color: #fff;
+  padding: 25px;
+  margin-top: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  max-width: 700px;
+  width: 100%;
+}
+
+#output-section.show {
+  display: block;
+}
+
+#output-section h2 {
+  margin-bottom: 15px;
+  color: #222f3e;
+}
+
+#story {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  white-space: pre-wrap;
+}
+
+/* Button group inside output section */
+#output-section button {
+  margin-right: 12px;
+  margin-bottom: 10px;
+}
+
   
